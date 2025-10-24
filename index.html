@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogSpace - Your Creative Writing Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .blog-card {
+            transition: all 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-full">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gradient">BlogSpace</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="homeBtn" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md font-medium transition-colors">Home</button>
+                    <button id="writeBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Write Post</button>
+                    <button id="adminBtn" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md font-medium transition-colors">Admin</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Home View -->
+        <div id="homeView" class="view">
+            <!-- Hero Section -->
+            <div class="gradient-bg rounded-2xl p-8 mb-12 text-white text-center">
+                <h2 class="text-4xl font-bold mb-4">Welcome to BlogSpace</h2>
+                <p class="text-xl opacity-90 mb-6">Share your thoughts, stories, and ideas with the world</p>
+                <button id="heroWriteBtn" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Start Writing</button>
+            </div>
+
+            <!-- Blog Posts Grid -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Latest Posts</h3>
+                <div id="blogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Blog posts will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Write Post View -->
+        <div id="writeView" class="view hidden">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Create New Post</h2>
+                <form id="postForm" class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="mb-6">
+                        <label for="postTitle" class="block text-sm font-medium text-gray-700 mb-2">Post Title</label>
+                        <input type="text" id="postTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your post title..." required>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="postAuthor" class="block text-sm font-medium text-gray-700 mb-2">Author Name</label>
+                        <input type="text" id="postAuthor" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Your name..." required>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="postCategory" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                        <select id="postCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                            <option value="">Select a category</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Food">Food</option>
+                            <option value="Business">Business</option>
+                            <option value="Health">Health</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <label for="postContent" class="block text-sm font-medium text-gray-700 mb-2">Content</label>
+                        <textarea id="postContent" rows="12" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Write your blog post content here..." required></textarea>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <button type="button" id="cancelBtn" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">Cancel</button>
+                        <button type="submit" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">Publish Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="adminView" class="view hidden">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8">Admin Dashboard</h2>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-blue-100 rounded-full">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Posts</p>
+                                <p id="totalPosts" class="text-2xl font-bold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-green-100 rounded-full">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Categories</p>
+                                <p id="totalCategories" class="text-2xl font-bold text-gray-900">6</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-purple-100 rounded-full">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Authors</p>
+                                <p id="totalAuthors" class="text-2xl font-bold text-gray-900">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posts Management -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Manage Posts</h3>
+                    <div id="adminPostsList" class="space-y-4">
+                        <!-- Admin posts list will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post Detail View -->
+        <div id="postDetailView" class="view hidden">
+            <div class="max-w-4xl mx-auto">
+                <button id="backToHome" class="mb-6 flex items-center text-purple-600 hover:text-purple-700 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to Home
+                </button>
+                <article id="postDetailContent" class="bg-white rounded-xl shadow-lg p-8">
+                    <!-- Post detail content will be inserted here -->
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Blog data storage
+        let blogPosts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        let currentView = 'home';
+
+        // DOM elements
+        const homeBtn = document.getElementById('homeBtn');
+        const writeBtn = document.getElementById('writeBtn');
+        const adminBtn = document.getElementById('adminBtn');
+        const heroWriteBtn = document.getElementById('heroWriteBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const backToHome = document.getElementById('backToHome');
+        const postForm = document.getElementById('postForm');
+
+        // View elements
+        const homeView = document.getElementById('homeView');
+        const writeView = document.getElementById('writeView');
+        const adminView = document.getElementById('adminView');
+        const postDetailView = document.getElementById('postDetailView');
+
+        // Initialize the app
+        function init() {
+            showView('home');
+            renderBlogPosts();
+            updateAdminStats();
+        }
+
+        // Show specific view
+        function showView(view) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            
+            // Show selected view
+            switch(view) {
+                case 'home':
+                    homeView.classList.remove('hidden');
+                    renderBlogPosts();
+                    break;
+                case 'write':
+                    writeView.classList.remove('hidden');
+                    break;
+                case 'admin':
+                    adminView.classList.remove('hidden');
+                    renderAdminPosts();
+                    updateAdminStats();
+                    break;
+                case 'detail':
+                    postDetailView.classList.remove('hidden');
+                    break;
+            }
+            currentView = view;
+        }
+
+        // Render blog posts on home page
+        function renderBlogPosts() {
+            const blogGrid = document.getElementById('blogGrid');
+            
+            if (blogPosts.length === 0) {
+                blogGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-600 mb-2">No posts yet</h3>
+                        <p class="text-gray-500 mb-4">Be the first to share your thoughts!</p>
+                        <button onclick="showView('write')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Write First Post</button>
+                    </div>
+                `;
+                return;
+            }
+
+            blogGrid.innerHTML = blogPosts.map(post => `
+                <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" onclick="showPostDetail('${post.id}')">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">${post.category}</span>
+                            <span class="text-sm text-gray-500">${post.date}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2">${post.title}</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">${post.content.substring(0, 150)}...</p>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                <span class="text-purple-600 font-medium text-sm">${post.author.charAt(0).toUpperCase()}</span>
+                            </div>
+                            <span class="ml-3 text-sm font-medium text-gray-700">${post.author}</span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // Show post detail
+        function showPostDetail(postId) {
+            const post = blogPosts.find(p => p.id === postId);
+            if (!post) return;
+
+            const postDetailContent = document.getElementById('postDetailContent');
+            postDetailContent.innerHTML = `
+                <div class="mb-6">
+                    <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">${post.category}</span>
+                </div>
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">${post.title}</h1>
+                <div class="flex items-center mb-8 pb-6 border-b border-gray-200">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <span class="text-purple-600 font-bold text-lg">${post.author.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-medium text-gray-800">${post.author}</p>
+                        <p class="text-sm text-gray-500">${post.date}</p>
+                    </div>
+                </div>
+                <div class="prose prose-lg max-w-none">
+                    ${post.content.split('\n').map(paragraph => `<p class="mb-4 text-gray-700 leading-relaxed">${paragraph}</p>`).join('')}
+                </div>
+            `;
+            
+            showView('detail');
+        }
+
+        // Render admin posts
+        function renderAdminPosts() {
+            const adminPostsList = document.getElementById('adminPostsList');
+            
+            if (blogPosts.length === 0) {
+                adminPostsList.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">No posts to manage yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            adminPostsList.innerHTML = blogPosts.map(post => `
+                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-800">${post.title}</h4>
+                        <p class="text-sm text-gray-500">By ${post.author} • ${post.date} • ${post.category}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="editPost('${post.id}')" class="text-blue-600 hover:text-blue-700 px-3 py-1 rounded transition-colors">Edit</button>
+                        <button onclick="deletePost('${post.id}')" class="text-red-600 hover:text-red-700 px-3 py-1 rounded transition-colors">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update admin statistics
+        function updateAdminStats() {
+            document.getElementById('totalPosts').textContent = blogPosts.length;
+            
+            const uniqueAuthors = [...new Set(blogPosts.map(post => post.author))];
+            document.getElementById('totalAuthors').textContent = uniqueAuthors.length;
+        }
+
+        // Delete post
+        function deletePost(postId) {
+            const postIndex = blogPosts.findIndex(p => p.id === postId);
+            if (postIndex > -1) {
+                blogPosts.splice(postIndex, 1);
+                localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+                renderAdminPosts();
+                updateAdminStats();
+            }
+        }
+
+        // Edit post (simplified - just shows write form with existing data)
+        function editPost(postId) {
+            const post = blogPosts.find(p => p.id === postId);
+            if (!post) return;
+
+            document.getElementById('postTitle').value = post.title;
+            document.getElementById('postAuthor').value = post.author;
+            document.getElementById('postCategory').value = post.category;
+            document.getElementById('postContent').value = post.content;
+            
+            // Store the ID for updating
+            postForm.dataset.editId = postId;
+            
+            showView('write');
+        }
+
+        // Event listeners
+        homeBtn.addEventListener('click', () => showView('home'));
+        writeBtn.addEventListener('click', () => showView('write'));
+        heroWriteBtn.addEventListener('click', () => showView('write'));
+        adminBtn.addEventListener('click', () => showView('admin'));
+        backToHome.addEventListener('click', () => showView('home'));
+        
+        cancelBtn.addEventListener('click', () => {
+            postForm.reset();
+            delete postForm.dataset.editId;
+            showView('home');
+        });
+
+        // Handle form submission
+        postForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('postTitle').value;
+            const author = document.getElementById('postAuthor').value;
+            const category = document.getElementById('postCategory').value;
+            const content = document.getElementById('postContent').value;
+            
+            const postData = {
+                id: postForm.dataset.editId || Date.now().toString(),
+                title,
+                author,
+                category,
+                content,
+                date: new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })
+            };
+
+            if (postForm.dataset.editId) {
+                // Update existing post
+                const postIndex = blogPosts.findIndex(p => p.id === postForm.dataset.editId);
+                if (postIndex > -1) {
+                    blogPosts[postIndex] = postData;
+                }
+                delete postForm.dataset.editId;
+            } else {
+                // Add new post
+                blogPosts.unshift(postData);
+            }
+            
+            localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+            postForm.reset();
+            showView('home');
+        });
+
+        // Initialize the app
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9936b44002997f17',t:'MTc2MTI3OTg2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
